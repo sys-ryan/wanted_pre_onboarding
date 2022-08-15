@@ -14,7 +14,7 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
     }),
     TypeOrmModule.forRoot(OrmConfig as TypeOrmModuleOptions),
-    CompanyModule
+    CompanyModule,
   ],
 
   controllers: [AppController],

@@ -1,4 +1,11 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { JobApplication } from 'src/job-application/entities/job-application.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class User {
@@ -10,4 +17,8 @@ export class User {
 
   @Column()
   email: string;
+
+  @OneToOne(() => JobApplication)
+  @JoinColumn()
+  jobApplication: JobApplication;
 }

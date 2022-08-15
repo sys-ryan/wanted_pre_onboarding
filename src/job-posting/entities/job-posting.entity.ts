@@ -1,9 +1,11 @@
 import { Company } from 'src/company/entities/company.entity';
+import { JobApplication } from 'src/job-application/entities/job-application.entity';
 import {
   Column,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -27,4 +29,8 @@ export class JobPosting {
   @ManyToOne(() => Company, (company) => company.jobPostings)
   @JoinColumn()
   company: Company;
+
+  @OneToOne(() => JobApplication)
+  @JoinColumn()
+  jobApplication: JobApplication;
 }

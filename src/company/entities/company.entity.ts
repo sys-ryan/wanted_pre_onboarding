@@ -9,6 +9,12 @@ export class Company {
   @Column()
   name: string;
 
+  @Column()
+  country: string;
+
+  @Column()
+  region: string;
+
   @OneToMany(() => JobPosting, (jobPosting) => jobPosting.company)
   jobPostings: JobPosting[];
 }

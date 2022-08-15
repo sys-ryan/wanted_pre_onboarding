@@ -1,4 +1,16 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateJobPostingDto } from './create-job-posting.dto';
+import { IsNumber, IsString, Min } from 'class-validator';
 
-export class UpdateJobPostingDto extends PartialType(CreateJobPostingDto) {}
+export class UpdateJobPostingDto {
+  @IsString()
+  position: string;
+
+  @IsNumber()
+  @Min(0)
+  compensation: number;
+
+  @IsString()
+  content: string;
+
+  @IsString()
+  technique: string;
+}

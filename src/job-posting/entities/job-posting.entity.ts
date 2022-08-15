@@ -1,16 +1,16 @@
 import { Company } from 'src/company/entities/company.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class JobPosting {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  country: string;
-
-  @Column()
-  region: string;
 
   @Column()
   position: string;
@@ -25,5 +25,6 @@ export class JobPosting {
   content: string;
 
   @ManyToOne(() => Company, (company) => company.jobPostings)
+  @JoinColumn()
   company: Company;
 }

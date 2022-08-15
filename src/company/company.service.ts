@@ -13,6 +13,8 @@ export class CompanyService {
   async create(createCompanyDto: CreateCompanyDto) {
     const company = await this.companyRepository.create({
       name: createCompanyDto.name,
+      country: createCompanyDto.country,
+      region: createCompanyDto.region,
     });
 
     return this.companyRepository.save(company);
@@ -22,8 +24,14 @@ export class CompanyService {
     return this.companyRepository.find();
   }
 
-  findOne(id: number) {
-    return this.companyRepository.findOne({ where: { id } });
+  async findOne(id: number) {
+    const company = await this.companyRepository.findOne({ where: { id } });
+
+    if (!company) {
+      throw new NotFoundException(`Company (id: ${id}) was not found.`);
+    }
+
+    return company;
   }
 
   async remove(id: number) {
@@ -31,6 +39,8 @@ export class CompanyService {
     if (!company) {
       throw new NotFoundException(`Company (id: ${id}) not found.`);
     }
+
+    await this.companyRepository.remove(company);
 
     return {
       message: `Company (id: ${id}) was deleted.`,

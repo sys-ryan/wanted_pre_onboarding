@@ -8,7 +8,6 @@ import { JobPostingService } from 'src/job-posting/job-posting.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import { CreateJobApplicationDto } from './dto/create-job-application.dto';
-import { UpdateJobApplicationDto } from './dto/update-job-application.dto';
 import { JobApplication } from './entities/job-application.entity';
 
 @Injectable()
@@ -61,6 +60,29 @@ export class JobApplicationService {
 
   // find job application by user id
   // find job application by jobpostisng id
+  async findJobApplicationByUseId(userId: number) {
+    const jobApplication = await this.jobApplicationRepository.findOne({
+      where: { user: { id: userId } },
+      relations: ['user', 'jobPosting'],
+    });
+
+    if (!jobApplication) {
+      throw new NotFoundException(
+        `Job Application (userId: ${userId}) not found.`,
+      );
+    }
+
+    return jobApplication;
+  }
+
+  async findJobApplicationByJobPostingId(jobPostingId: number) {
+    const jobApplication = await this.jobApplicationRepository.find({
+      where: { jobPosting: { id: jobPostingId } },
+    });
+
+    return jobApplication;
+  }
+
   findOne(id: number) {
     return `This action returns a #${id} jobApplication`;
   }

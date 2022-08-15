@@ -5,7 +5,7 @@ export const envFilePath = `${__dirname}/config/env/.${process.env.NODE_ENV}.env
 
 dotenv.config({ path: envFilePath });
 
-export class OrmConfig {
+class OrmConfig {
   getConfig() {
     let ormConfig: TypeOrmModuleOptions;
 
@@ -21,7 +21,7 @@ export class OrmConfig {
           autoLoadEntities: true,
           synchronize: true,
           migrations: [__dirname + '/migrations/*.ts'],
-        };
+        } as TypeOrmModuleOptions;
       }
 
       case 'deployment': {

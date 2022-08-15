@@ -5,7 +5,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -30,6 +30,9 @@ export class JobPosting {
   @JoinColumn()
   company: Company;
 
-  @OneToOne(() => JobApplication, (jobApplication) => jobApplication.jobPosting)
-  jobApplication: JobApplication;
+  @OneToMany(
+    () => JobApplication,
+    (jobApplication) => jobApplication.jobPosting,
+  )
+  jobApplications: JobApplication[];
 }

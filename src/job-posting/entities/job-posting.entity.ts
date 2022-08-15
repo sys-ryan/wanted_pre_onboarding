@@ -34,5 +34,5 @@ export class JobPosting {
     () => JobApplication,
     (jobApplication) => jobApplication.jobPosting,
   )
-  jobApplication: JobApplication;
+  jobApplications: JobApplication[];
 }

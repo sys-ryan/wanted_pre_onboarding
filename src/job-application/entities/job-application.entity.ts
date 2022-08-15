@@ -17,7 +17,7 @@ export class JobApplication {
   @JoinColumn()
   user: User;
 
-  @ManyToOne(() => JobPosting, (jobPosting) => jobPosting.jobApplication)
+  @ManyToOne(() => JobPosting, (jobPosting) => jobPosting.jobApplications)
   @JoinColumn()
   jobPosting: JobPosting;
 }

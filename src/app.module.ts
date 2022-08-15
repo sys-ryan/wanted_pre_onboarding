@@ -8,6 +8,7 @@ import OrmConfig, { envFilePath } from './ormConfig';
 import { ConfigModule } from '@nestjs/config';
 import { JobPostingModule } from './job-posting/job-posting.module';
 import { UserModule } from './user/user.module';
+import { JobApplicationModule } from './job-application/job-application.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { UserModule } from './user/user.module';
     CompanyModule,
     JobPostingModule,
     UserModule,
+    JobApplicationModule,
   ],
 
   controllers: [AppController],

@@ -1,5 +1,5 @@
-import { Company } from 'src/company/entities/company.entity';
-import { JobApplication } from 'src/job-application/entities/job-application.entity';
+import { Company } from '../../company/entities/company.entity';
+import { JobApplication } from '../../job-application/entities/job-application.entity';
 import {
   Column,
   Entity,
@@ -30,7 +30,7 @@ export class JobPosting {
   @JoinColumn()
   company: Company;
 
-  @OneToOne(() => JobApplication)
+  @OneToOne(() => JobApplication, (jobApplication) => jobApplication.jobPosting)
   @JoinColumn()
   jobApplication: JobApplication;
 }

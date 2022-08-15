@@ -7,9 +7,9 @@ export class JobApplication {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, (user) => user.jobApplication)
   user: User;
 
-  @OneToOne(() => JobPosting)
+  @OneToOne(() => JobPosting, (jobPosting) => jobPosting.jobApplication)
   jobPosting: JobPosting;
 }

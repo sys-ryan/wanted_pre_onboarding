@@ -1,4 +1,4 @@
-import { JobApplication } from 'src/job-application/entities/job-application.entity';
+import { JobApplication } from '../../job-application/entities/job-application.entity';
 import {
   Column,
   Entity,
@@ -18,7 +18,7 @@ export class User {
   @Column()
   email: string;
 
-  @OneToOne(() => JobApplication)
+  @OneToOne(() => JobApplication, (jobApplication) => jobApplication.user)
   @JoinColumn()
   jobApplication: JobApplication;
 }

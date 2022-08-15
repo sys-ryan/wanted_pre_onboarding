@@ -24,7 +24,7 @@ export class JobApplicationService {
     const { userId, jobPostingId } = createJobApplicationDto;
 
     // 사용자는 1회만 지원 가능합니다.
-    this.checkUserApplication(userId);
+    await this.checkUserApplication(userId);
 
     const jobPosting = await this.jobPostingService.findOne(jobPostingId);
 
@@ -45,11 +45,18 @@ export class JobApplicationService {
       user,
     });
 
-    return this.jobApplicationRepository.save(jobApplication);
+    const applied = await this.jobApplicationRepository.save(jobApplication);
+
+    return {
+      message: 'Job Application done.',
+      jobApplicationId: applied.id,
+    };
   }
 
   findAll() {
-    return this.jobApplicationRepository.find();
+    return this.jobApplicationRepository.find({
+      relations: ['jobPosting', 'user'],
+    });
   }
 
   // find job application by user id
@@ -77,6 +84,7 @@ export class JobApplicationService {
   private async checkUserApplication(userId: number) {
     const application = await this.jobApplicationRepository.findOne({
       where: { user: { id: userId } },
+      relations: ['jobPosting', 'user'],
     });
 
     if (application) {

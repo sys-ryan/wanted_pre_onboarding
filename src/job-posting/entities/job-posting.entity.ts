@@ -31,6 +31,5 @@ export class JobPosting {
   company: Company;
 
   @OneToOne(() => JobApplication, (jobApplication) => jobApplication.jobPosting)
-  @JoinColumn()
   jobApplication: JobApplication;
 }

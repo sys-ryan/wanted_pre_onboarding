@@ -78,7 +78,14 @@ export class JobApplicationService {
   async findJobApplicationByJobPostingId(jobPostingId: number) {
     const jobApplication = await this.jobApplicationRepository.find({
       where: { jobPosting: { id: jobPostingId } },
+      relations: ['user', 'jobPosting'],
     });
+
+    if (!jobApplication) {
+      throw new NotFoundException(
+        `Job Application (jobPostingId: ${jobPostingId}) not found.`,
+      );
+    }
 
     return jobApplication;
   }

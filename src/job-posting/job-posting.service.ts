@@ -1,11 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { format } from 'path';
 import { CompanyService } from 'src/company/company.service';
-import { Repository } from 'typeorm';
+import { Repository, DataSource } from 'typeorm';
 import { CreateJobPostingDto } from './dto/create-job-posting.dto';
 import { UpdateJobPostingDto } from './dto/update-job-posting.dto';
 import { JobPosting } from './entities/job-posting.entity';
+
+interface QueryBuilderJobPosting {
+  job_posting_id: number;
+  job_posting_position: string;
+  job_posting_compensation: number;
+  job_posting_technique: string;
+  job_posting_content: string;
+  job_posting_companyId: number;
+  company_name: string;
+  company_country: string;
+  company_region: string;
+}
 
 @Injectable()
 export class JobPostingService {
@@ -13,6 +24,7 @@ export class JobPostingService {
     @InjectRepository(JobPosting)
     private jobPostingRepository: Repository<JobPosting>,
     private companyService: CompanyService,
+    private dataSource: DataSource,
   ) {}
 
   async create(createJobPostingDto: CreateJobPostingDto) {
@@ -37,31 +49,42 @@ export class JobPostingService {
     return this.jobPostingRepository.save(jobPosting);
   }
 
-  async findAll() {
-    const jobPostingList = await this.jobPostingRepository.find({
-      relations: ['company'],
-    });
+  async findAll(search: string) {
+    let result;
 
-    const formattedJobPostingList = this.formatJobPostingList(jobPostingList);
+    if (search) {
+      // search query parameter가 설정된 경우
+      result = await this.dataSource
+        .getRepository(JobPosting)
+        .createQueryBuilder('job_posting')
+        .leftJoin('job_posting.company', 'company')
+        .addSelect('company.name')
+        .addSelect('company.country')
+        .addSelect('company.region')
+        .where(
+          `company.name LIKE :search
+            or company.country LIKE :search
+            or company.region LIKE :search
+            or job_posting.position LIKE :search
+            or job_posting.technique LIKE :search
+          `,
+          { search: `%${search}%` },
+        )
+        .execute();
+    } else {
+      // no search parameter
+      result = await this.dataSource
+        .getRepository(JobPosting)
+        .createQueryBuilder('job_posting')
+        .leftJoin('job_posting.company', 'company')
+        .addSelect('company.name')
+        .addSelect('company.country')
+        .addSelect('company.region')
+        .execute();
+    }
 
-    return formattedJobPostingList;
-  }
-
-  private formatJobPostingList(list: JobPosting[]) {
-    const formattedList = [];
-    list.forEach((posting) => {
-      formattedList.push({
-        id: posting.id,
-        companyName: posting.company.name,
-        country: posting.company.country,
-        region: posting.company.region,
-        position: posting.position,
-        compensation: posting.compensation,
-        technique: posting.technique,
-      });
-    });
-
-    return formattedList;
+    result = this.formatJobPostingList(result);
+    return result;
   }
 
   async findOne(id: number) {
@@ -80,7 +103,7 @@ export class JobPostingService {
       (id) => id != jobPosting.id,
     );
 
-    const formattedJobPosting = this.formatJobPostingList([jobPosting])[0];
+    const formattedJobPosting = this.formatJobPosting(jobPosting);
     formattedJobPosting['content'] = jobPosting.content;
     formattedJobPosting['otherJobPostingOfThisCompany'] = companyJobPostingIds;
 
@@ -115,5 +138,35 @@ export class JobPostingService {
     return {
       message: `Job Posting (id: ${id}) was deleted.`,
     };
+  }
+
+  private formatJobPostingList(list: QueryBuilderJobPosting[]) {
+    const formattedJobPostingList = list.map((posting) => {
+      return {
+        id: posting.job_posting_id,
+        companyName: posting.company_name,
+        country: posting.company_country,
+        region: posting.company_region,
+        position: posting.job_posting_position,
+        compensation: posting.job_posting_compensation,
+        technique: posting.job_posting_technique,
+      };
+    });
+
+    return formattedJobPostingList;
+  }
+
+  private formatJobPosting(posting: JobPosting) {
+    const formattedPost = {
+      id: posting.id,
+      companyName: posting.company.name,
+      country: posting.company.country,
+      region: posting.company.region,
+      position: posting.position,
+      compensation: posting.compensation,
+      technique: posting.technique,
+    };
+
+    return formattedPost;
   }
 }

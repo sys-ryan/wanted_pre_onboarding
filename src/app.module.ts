@@ -6,6 +6,7 @@ import { CompanyModule } from './company/company.module';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import OrmConfig, { envFilePath } from './ormConfig';
 import { ConfigModule } from '@nestjs/config';
+import { JobPostingModule } from './job-posting/job-posting.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     TypeOrmModule.forRoot(OrmConfig as TypeOrmModuleOptions),
     CompanyModule,
+    JobPostingModule,
   ],
 
   controllers: [AppController],

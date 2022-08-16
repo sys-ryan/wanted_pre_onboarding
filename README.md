@@ -71,6 +71,16 @@ Wanted 프리 온보딩 백엔드 코스 4차 선발과제
 - TypeORM (ORM)
 - mysql (RDBMS)
 
+#### 요구사항 충족도 100% (가산점 항목 포함)
+✔︎ 1. 채용공고 등록합니다. 
+✔︎ 2. 채용공고 수정합니다.
+✔︎ 3. 채용공고 삭제합니다.
+✔︎ 4-1. 채용공고 목록을 가져옵니다.
+✔︎ 4-2. 채용공고 검색 기능 구현
+✔︎ 5. 채용 상세 페이지를 가져옵니다.
+✔︎ 6. 사용자는 채용공고에 지원합니다. 
+
+
 ### Database 생성 및 App 과 연결 
 - Database 는 docker mysql:8 image를 상용하여 컨테이너로 로컬 환경에 구동시켰습니다. 
 - TypeORM configuration을 위하여 `src/config/env` 폴더에 `.development.env` 파일을 만들어 development environment에서의 환경 변수를 등록하였습니다. 

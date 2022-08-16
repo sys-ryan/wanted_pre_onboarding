@@ -92,6 +92,11 @@ Wanted 프리 온보딩 백엔드 코스 4차 선발과제
 company, job-posting, user, job-application에 대한 TyneORM Entity를 정의하였습니다. 
 각 entity와 entities의 relations는 `1. 요구사항 분석`에서 기술한 내용을 기반으로 정의되었습니다. 
 
+- Company Entity: `src/company/entities/company.entity.ts`
+- JobPosting Entity: `src/job-posting/entities/job-posting.entity.ts`
+- User Eneity: `src/user/entities/user.entity.ts`
+- JobApplication Entity: `src/job-application/entities/job-application.entity.ts`
+
 
 ### 요구사항 1-6을 만족하기 위해 필요한 부가적인 API 생성 
 요구사항 1-6 을 만족하기 위해서는 Company, User 데이터가 필요합니다. 왜냐하면 JobPosting은 CompanyId를 Foreign Key로 하고 JobApplication은 userId와 jobPostingId를 Foreign Key로 하기 때문입니다. 
@@ -100,7 +105,7 @@ company, job-posting, user, job-application에 대한 TyneORM Entity를 정의�
 
 각 모델에 대한 생성 API(POST) 에서는, 데이터에 대한 Validation 및 Serialization을 위하여  DTO(Data Transfer Object)와 `class-transformer`와 `class-validator`를 활용하였습니다. 
 
-- User 
+- User (src/user/user.contorller.ts)
     - POST /user (사용자 생성)
         - `create-user.dto.ts`: data validation & serialization
             - name: st ring
@@ -113,7 +118,7 @@ company, job-posting, user, job-application에 대한 TyneORM Entity를 정의�
 
 
 
-- Company
+- Company (src/company/company.controller.ts)
     - POST /company (회사 생성)
         - `create-company.dto.ts`: data validation & serialization
             - name: string
@@ -126,7 +131,7 @@ company, job-posting, user, job-application에 대한 TyneORM Entity를 정의�
 
 
 ### 요구사항 구현 
-#### JobPosting
+#### JobPosting (src/job-posting/job-posting.controller.ts)
 - POST /job-posting (요구사항 1. 채용공고 등록)
     - `create-job-posting.dto.ts`: data validation & serialization
         - companyId: number
@@ -246,7 +251,7 @@ company, job-posting, user, job-application에 대한 TyneORM Entity를 정의�
     }
     ```
 
-- JobApplication 
+- JobApplication (src/job-application/job-application.ts)
     - POST /job-application (요구사항 6. 사용자가 채용공고에 지원)
         - `create-job-application.dto.ts`: data validation & serialization
             - userId: number
